@@ -2,12 +2,6 @@ library fl_flash;
 
 import 'package:flutter/material.dart';
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
-
 class Flash {
   Flash(
       {this.backgroundColor,
@@ -79,16 +73,31 @@ class FlashManager {
 }
 
 class MaterialFlash extends StatelessWidget {
-  List<Widget> flashes = [];
+  MaterialFlash({this.limit, this.deleteAll = true});
+
+  final int? limit;
+  final bool deleteAll;
+
   @override
   Widget build(BuildContext context) {
-    for (Flash flash in FlashManager.get()) {
-      Widget flash2 = MaterialFlashOne(flash: flash);
-      flashes.add(flash2);
+    List<Widget> flashes = [];
+    if (limit != null) {
+      for (int i = 0; i < limit!; i++) {
+        try {
+          flashes.add(MaterialFlashOne(flash: FlashManager.get()[i]));
+        } catch (e) {
+          continue;
+        }
+      }
+    } else {
+      for (Flash flash in FlashManager.get()) {
+        Widget flash2 = MaterialFlashOne(flash: flash);
+        flashes.add(flash2);
+      }
     }
-    FlashManager.removeAll();
+    if (deleteAll) {
+      FlashManager.removeAll();
+    }
     return Column(children: flashes);
   }
 }
-
-// ignore_for_file: must_be_immutable
