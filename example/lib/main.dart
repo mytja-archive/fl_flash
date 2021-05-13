@@ -54,7 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
           mainText: Text("If that looked boring, \nhave a look at this",
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
           backgroundColor: Colors.green.shade100,
-          icon: Icon(Icons.audiotrack));
+          icon: Icon(Icons.audiotrack),
+          id: "boring?");
       FlashManager.add(flashAdvanced);
 
       Flash flashApprove = Flash(
@@ -89,7 +90,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: ListView(
         children: <Widget>[
-          MaterialFlash(),
+          MaterialFlash(
+            ignore: [],
+          ),
           Text("Here is your app body"),
           ElevatedButton(
               onPressed: () => setState(() {}), child: Text("Reload page"))

@@ -7,12 +7,14 @@ class Flash {
       {this.backgroundColor,
       required this.mainText,
       this.icon,
-      this.bottomText});
+      this.bottomText,
+      this.id = "flash"});
 
   final Color? backgroundColor;
   final Text mainText;
   final Widget? bottomText;
   final Icon? icon;
+  final String id;
 }
 
 class FlashStorage {
@@ -72,11 +74,13 @@ class FlashManager {
   }
 }
 
+// ignore: must_be_immutable
 class MaterialFlash extends StatelessWidget {
-  MaterialFlash({this.limit, this.deleteAll = true});
+  MaterialFlash({this.limit, this.deleteAll = true, this.ignore = const []});
 
   final int? limit;
   final bool deleteAll;
+  List<String> ignore = [];
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +88,10 @@ class MaterialFlash extends StatelessWidget {
     if (limit != null) {
       for (int i = 0; i < limit!; i++) {
         try {
-          flashes.add(MaterialFlashOne(flash: FlashManager.get()[i]));
+          Flash flash = FlashManager.get()[i];
+          if (!ignore.contains(flash.id)) {
+            flashes.add(MaterialFlashOne(flash: FlashManager.get()[i]));
+          }
         } catch (e) {
           continue;
         }
@@ -92,7 +99,9 @@ class MaterialFlash extends StatelessWidget {
     } else {
       for (Flash flash in FlashManager.get()) {
         Widget flash2 = MaterialFlashOne(flash: flash);
-        flashes.add(flash2);
+        if (!ignore.contains(flash.id)) {
+          flashes.add(flash2);
+        }
       }
     }
     if (deleteAll) {
